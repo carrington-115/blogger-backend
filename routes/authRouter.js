@@ -4,7 +4,7 @@ const {
   signOutUser,
   userProfile,
 } = require("../controllers/controllers");
-const passport = require("passport");
+const passport = require("../config/passport");
 const { autoAuthRedirectMiddleware } = require("../middleware/middleware");
 const router = express.Router();
 
@@ -14,11 +14,11 @@ router.post(
   autoAuthRedirectMiddleware,
   passport.authenticate("local", {
     successRedirect: "/auth/profile",
-    failureRedirect: "/auth/login",
+    failureRedirect: "/auth/signup",
     failureFlash: true,
   })
 );
-router.post("/auth/logout", signOutUser);
+router.post("/logout", signOutUser);
 router.get("/profile", userProfile);
 
 module.exports = router;

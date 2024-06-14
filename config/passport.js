@@ -9,21 +9,21 @@ passport.use(
       const user = await findUserByUsername(username);
       if (!user)
         return done(null, false, { message: "The user does not exist" });
-      const isMatch = await bcrypt.compare(password, user?.password);
+      const isMatch = await bcrypt.compare(password, user?.encryptedPassword);
       if (!isMatch)
         return done(null, fale, { message: "The password does not match" });
-      return user;
+      return done(null, user);
     } catch (error) {
       return done(error);
     }
   })
 );
 passport.serializeUser((user, done) => {
-  done(user);
+  return done(null, user);
 });
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await findUserById(id);
+    const user = await findUserById(id._id);
     return done(null, user);
   } catch (error) {
     return done(null, error);
