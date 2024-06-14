@@ -7,6 +7,12 @@ const MongoStore = require("connect-mongo");
 const { client, connectDBConfig } = require("./config/dbConfig");
 const passport = require("passport");
 const dbName = "users";
+const port = process.env.PORT;
+const authRouter = require("./routes/authRouter");
+const cors = require("cors");
+
+// starting the connectino sequence to the database
+connectDBConfig();
 
 // passing all essential middleware to the root
 app.use([
@@ -24,10 +30,12 @@ app.use([
   passport.session(),
 ]);
 
-// starting the connectino sequence to the database
-connectDBConfig();
-
-const port = process.env.PORT;
+app.use("/auth", authRouter);
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
 app.listen(port, () => {
   try {
