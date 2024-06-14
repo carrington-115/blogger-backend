@@ -1,6 +1,31 @@
 require("dotenv").config({ path: ".env" });
 const express = require("express");
 const app = express();
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const { client, connectDBConfig } = require("./config/dbConfig");
+const passport = require("passport");
+const dbName = "users";
+
+// passing all essential middleware to the root
+app.use([
+  express.json(),
+  express.urlencoded({ extended: true }),
+  cookieParser(),
+  session({
+    secret: "secret key",
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({ client: client, dbName: dbName }),
+    cookie: { secure: false },
+  }),
+  passport.initialize(),
+  passport.session(),
+]);
+
+// starting the connectino sequence to the database
+connectDBConfig();
 
 const port = process.env.PORT;
 
