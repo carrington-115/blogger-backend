@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { client } = require("../config/dbConfig");
+const bcrypt = require("bcrypt");
 const session = client.startSession();
 const accountCollection = client.db("users").collection("accounts");
 
@@ -29,6 +30,22 @@ const findUserById = async (userId) => {
     await session.endSession();
   }
 };
-const createUser = async () => {};
+const createUser = async (username, password) => {
+  session.startTransaction();
+  try {
+    const encryptedPassword = await bcrypt.hash(password, 12);
+    const user = await accountCollection.insertOne({
+      username,
+      encryptedPassword,
+    });
+
+    return user?.insertedId;
+  } catch (error) {
+    await session.abortTransaction();
+    console.error(error);
+  } finally {
+    await session.endSession();
+  }
+};
 
 module.exports = { findUserByUsername, findUserById, createUser };
