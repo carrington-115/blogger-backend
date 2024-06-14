@@ -38,7 +38,6 @@ const createUser = async (username, password) => {
       username,
       encryptedPassword,
     });
-
     return user?.insertedId;
   } catch (error) {
     await session.abortTransaction();
