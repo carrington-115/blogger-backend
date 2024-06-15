@@ -9,6 +9,7 @@ const passport = require("./config/passport");
 const dbName = "users";
 const port = process.env.PORT;
 const authRouter = require("./routes/authRouter");
+const emailRouter = require("./routes/emailRouter");
 const cors = require("cors");
 
 // starting the connectino sequence to the database
@@ -31,6 +32,7 @@ app.use([
 ]);
 
 app.use("/auth", authRouter);
+app.use("/", emailRouter);
 app.use(
   cors({
     origin: "http://localhost:3000",
