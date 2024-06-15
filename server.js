@@ -12,6 +12,15 @@ const authRouter = require("./routes/authRouter");
 const emailRouter = require("./routes/emailRouter");
 const cors = require("cors");
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type, Authorization",
+    credentials: true,
+  })
+);
+
 // starting the connectino sequence to the database
 connectDBConfig();
 
@@ -33,11 +42,6 @@ app.use([
 
 app.use("/auth", authRouter);
 app.use("/", emailRouter);
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-  })
-);
 
 app.listen(port, () => {
   try {
