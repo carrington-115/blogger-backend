@@ -1,5 +1,5 @@
 require("dotenv").config({ path: "../.env" });
-const { default: Mailjet } = require("node-mailjet");
+const Mailjet = require("node-mailjet");
 const { sendEmail } = require("../middleware/middleware");
 
 const emailSendingController = (req, res) => {
