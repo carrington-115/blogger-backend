@@ -5,7 +5,7 @@ const signUpUser = async (req, res) => {
   try {
     const { username, password } = req.body;
     await createUser(username, password);
-    res.send("Data is submitted");
+    res.status(200).json({ success: true, message: "Data is submitted" });
   } catch (error) {
     console.error(error);
   }
